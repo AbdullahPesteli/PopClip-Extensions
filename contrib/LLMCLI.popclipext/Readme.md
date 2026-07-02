@@ -121,6 +121,8 @@ Hold a modifier while clicking the PopClip action to bypass the configured provi
 - Command + Shift: Codex / Mail Kurumsal.
 - Command + Control: open Picker.
 
+The action title also includes a compact shortcut reminder. Choose `Help` as the provider, or choose `Shortcut Help` inside Picker, to show a small macOS reminder dialog.
+
 ## Notes
 
 - This extension sends selected text to whichever third-party CLI/provider you choose.

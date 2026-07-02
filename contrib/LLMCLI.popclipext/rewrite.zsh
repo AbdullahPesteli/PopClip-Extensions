@@ -19,6 +19,19 @@ if [[ -z "${input//[[:space:]]/}" ]]; then
   exit 1
 fi
 
+show_help() {
+  osascript <<'APPLESCRIPT' >/dev/null 2>&1 || true
+display dialog "Click: configured default
+⌥ Option: Ollama / Chat
+⇧ Shift: Ollama / Mail
+⌃ Control: Ollama / Müşteri Tonu
+⌘ Command: Codex / Düzelt
+⌘⌥: Codex / Chat
+⌘⇧: Codex / Mail
+⌘⌃: Picker" buttons {"OK"} default button "OK" with title "LLM CLI Shortcuts"
+APPLESCRIPT
+}
+
 # Fast path: PopClip passes modifier keys to shell scripts. This gives one-icon
 # quick selection without native submenu support.
 case "$modifier_flags" in
@@ -33,8 +46,8 @@ esac
 
 if [[ "$provider" == "picker" ]]; then
   choice="$(osascript <<'APPLESCRIPT' 2>/dev/null || true
-set choices to {"Ollama - Düzelt", "Ollama - Chat Kurumsal", "Ollama - Mail Kurumsal", "Ollama - Müşteri Tonu", "Codex - Düzelt", "Codex - Chat Kurumsal", "Codex - Mail Kurumsal", "Codex - Müşteri Tonu", "OpenCode - Düzelt", "OpenCode - Chat Kurumsal", "Claude - Düzelt", "Gemini - Düzelt"}
-set picked to choose from list choices with title "LLM CLI" with prompt "Provider / preset seç:" default items {"Ollama - Düzelt"}
+set choices to {"Ollama - Düzelt", "⌥ Ollama - Chat Kurumsal", "⇧ Ollama - Mail Kurumsal", "⌃ Ollama - Müşteri Tonu", "⌘ Codex - Düzelt", "⌘⌥ Codex - Chat Kurumsal", "⌘⇧ Codex - Mail Kurumsal", "Codex - Müşteri Tonu", "OpenCode - Düzelt", "OpenCode - Chat Kurumsal", "Claude - Düzelt", "Gemini - Düzelt", "Shortcut Help"}
+set picked to choose from list choices with title "LLM CLI" with prompt "Provider / preset seç. Semboller aynı işi hızlı tıkta da yapar:" default items {"Ollama - Düzelt"}
 if picked is false then
   return ""
 end if
@@ -43,19 +56,25 @@ APPLESCRIPT
 )"
   case "$choice" in
     "Ollama - Düzelt") provider="ollama"; preset="duzelt" ;;
-    "Ollama - Chat Kurumsal") provider="ollama"; preset="chat" ;;
-    "Ollama - Mail Kurumsal") provider="ollama"; preset="mail" ;;
-    "Ollama - Müşteri Tonu") provider="ollama"; preset="musteri" ;;
-    "Codex - Düzelt") provider="codex"; preset="duzelt" ;;
-    "Codex - Chat Kurumsal") provider="codex"; preset="chat" ;;
-    "Codex - Mail Kurumsal") provider="codex"; preset="mail" ;;
+    "⌥ Ollama - Chat Kurumsal"|"Ollama - Chat Kurumsal") provider="ollama"; preset="chat" ;;
+    "⇧ Ollama - Mail Kurumsal"|"Ollama - Mail Kurumsal") provider="ollama"; preset="mail" ;;
+    "⌃ Ollama - Müşteri Tonu"|"Ollama - Müşteri Tonu") provider="ollama"; preset="musteri" ;;
+    "⌘ Codex - Düzelt"|"Codex - Düzelt") provider="codex"; preset="duzelt" ;;
+    "⌘⌥ Codex - Chat Kurumsal"|"Codex - Chat Kurumsal") provider="codex"; preset="chat" ;;
+    "⌘⇧ Codex - Mail Kurumsal"|"Codex - Mail Kurumsal") provider="codex"; preset="mail" ;;
     "Codex - Müşteri Tonu") provider="codex"; preset="musteri" ;;
     "OpenCode - Düzelt") provider="opencode"; preset="duzelt" ;;
     "OpenCode - Chat Kurumsal") provider="opencode"; preset="chat" ;;
     "Claude - Düzelt") provider="claude"; preset="duzelt" ;;
     "Gemini - Düzelt") provider="gemini"; preset="duzelt" ;;
+    "Shortcut Help") show_help; exit 1 ;;
     *) exit 1 ;;
   esac
+fi
+
+if [[ "$provider" == "help" ]]; then
+  show_help
+  exit 1
 fi
 
 case "$preset" in
