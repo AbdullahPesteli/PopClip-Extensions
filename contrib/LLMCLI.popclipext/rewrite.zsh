@@ -12,11 +12,24 @@ provider="${POPCLIP_OPTION_PROVIDER:-ollama}"
 preset="${POPCLIP_OPTION_PRESET:-duzelt}"
 model="${POPCLIP_OPTION_MODEL:-}"
 custom_prompt="${POPCLIP_OPTION_CUSTOMPROMPT:-}"
+modifier_flags="${POPCLIP_MODIFIER_FLAGS:-0}"
 input="$(cat)"
 
 if [[ -z "${input//[[:space:]]/}" ]]; then
   exit 1
 fi
+
+# Fast path: PopClip passes modifier keys to shell scripts. This gives one-icon
+# quick selection without native submenu support.
+case "$modifier_flags" in
+  524288) provider="ollama"; preset="chat" ;;       # Option
+  131072) provider="ollama"; preset="mail" ;;       # Shift
+  262144) provider="ollama"; preset="musteri" ;;    # Control
+  1048576) provider="codex"; preset="duzelt" ;;     # Command
+  1572864) provider="codex"; preset="chat" ;;       # Command + Option
+  1179648) provider="codex"; preset="mail" ;;       # Command + Shift
+  1310720) provider="picker" ;;                     # Command + Control
+esac
 
 if [[ "$provider" == "picker" ]]; then
   choice="$(osascript <<'APPLESCRIPT' 2>/dev/null || true

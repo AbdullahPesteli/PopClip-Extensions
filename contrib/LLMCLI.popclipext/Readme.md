@@ -18,6 +18,7 @@ It is useful when you already pay for or are logged into a CLI tool and do not w
 - No API key field in PopClip.
 - Can use local Ollama preset models when available.
 - Includes a native macOS picker mode for choosing provider/preset at runtime.
+- Supports modifier-key shortcuts for quick provider/preset changes without opening settings.
 - Supports multiple rewrite presets:
   - `Düzelt`: minimal Turkish spelling/punctuation correction.
   - `Chat Kurumsal`: clearer WhatsApp/Telegram work-message tone.
@@ -106,6 +107,19 @@ Configure a provider, then choose `OpenCode CLI` in PopClip settings.
 3. The selected text is replaced with the rewritten text.
 
 Holding Shift with PopClip's `paste-result` behavior usually copies instead of pasting, depending on PopClip settings/version.
+
+### Quick Modifier Shortcuts
+
+Hold a modifier while clicking the PopClip action to bypass the configured provider/preset:
+
+- No modifier: configured provider/preset.
+- Option: Ollama / Chat Kurumsal.
+- Shift: Ollama / Mail Kurumsal.
+- Control: Ollama / Müşteri Tonu.
+- Command: Codex / Düzelt.
+- Command + Option: Codex / Chat Kurumsal.
+- Command + Shift: Codex / Mail Kurumsal.
+- Command + Control: open Picker.
 
 ## Notes
 
