@@ -8,7 +8,7 @@ export LC_ALL="${LC_ALL:-en_US.UTF-8}"
 # Homebrew, npm, and system locations without hard-coding a single machine.
 export PATH="$HOME/.npm-global/bin:$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
-provider="${POPCLIP_OPTION_PROVIDER:-codex}"
+provider="${POPCLIP_OPTION_PROVIDER:-ollama}"
 preset="${POPCLIP_OPTION_PRESET:-duzelt}"
 model="${POPCLIP_OPTION_MODEL:-}"
 custom_prompt="${POPCLIP_OPTION_CUSTOMPROMPT:-}"
@@ -16,6 +16,33 @@ input="$(cat)"
 
 if [[ -z "${input//[[:space:]]/}" ]]; then
   exit 1
+fi
+
+if [[ "$provider" == "picker" ]]; then
+  choice="$(osascript <<'APPLESCRIPT' 2>/dev/null || true
+set choices to {"Ollama - Düzelt", "Ollama - Chat Kurumsal", "Ollama - Mail Kurumsal", "Ollama - Müşteri Tonu", "Codex - Düzelt", "Codex - Chat Kurumsal", "Codex - Mail Kurumsal", "Codex - Müşteri Tonu", "OpenCode - Düzelt", "OpenCode - Chat Kurumsal", "Claude - Düzelt", "Gemini - Düzelt"}
+set picked to choose from list choices with title "LLM CLI" with prompt "Provider / preset seç:" default items {"Ollama - Düzelt"}
+if picked is false then
+  return ""
+end if
+return item 1 of picked
+APPLESCRIPT
+)"
+  case "$choice" in
+    "Ollama - Düzelt") provider="ollama"; preset="duzelt" ;;
+    "Ollama - Chat Kurumsal") provider="ollama"; preset="chat" ;;
+    "Ollama - Mail Kurumsal") provider="ollama"; preset="mail" ;;
+    "Ollama - Müşteri Tonu") provider="ollama"; preset="musteri" ;;
+    "Codex - Düzelt") provider="codex"; preset="duzelt" ;;
+    "Codex - Chat Kurumsal") provider="codex"; preset="chat" ;;
+    "Codex - Mail Kurumsal") provider="codex"; preset="mail" ;;
+    "Codex - Müşteri Tonu") provider="codex"; preset="musteri" ;;
+    "OpenCode - Düzelt") provider="opencode"; preset="duzelt" ;;
+    "OpenCode - Chat Kurumsal") provider="opencode"; preset="chat" ;;
+    "Claude - Düzelt") provider="claude"; preset="duzelt" ;;
+    "Gemini - Düzelt") provider="gemini"; preset="duzelt" ;;
+    *) exit 1 ;;
+  esac
 fi
 
 case "$preset" in
@@ -63,6 +90,52 @@ require_command() {
   fi
 }
 
+ollama_model_for_preset() {
+  case "$preset" in
+    duzelt) printf "%s" "turkce-duzelt" ;;
+    chat) printf "%s" "turkce-chat-kurumsal" ;;
+    mail) printf "%s" "turkce-mail-kurumsal" ;;
+    musteri) printf "%s" "turkce-mail-musteri-tonu" ;;
+    custom)
+      if [[ -n "$model" ]]; then
+        printf "%s" "$model"
+      else
+        echo "Custom preset with Ollama requires Model to be set." >&2
+        exit 2
+      fi
+      ;;
+    *) echo "Unknown preset: $preset" >&2; exit 2 ;;
+  esac
+}
+
+run_ollama() {
+  local selected_model
+  local content
+  if [[ -n "$model" ]]; then
+    selected_model="$model"
+    content="$prompt"
+  else
+    selected_model="$(ollama_model_for_preset)"
+    if [[ "$preset" == "custom" ]]; then
+      content="$prompt"
+    else
+      content="$input"
+    fi
+  fi
+  local payload
+  payload="$(MODEL="$selected_model" CONTENT="$content" osascript -l JavaScript <<'JXA'
+ObjC.import('stdlib')
+const model = ObjC.unwrap($.getenv('MODEL'))
+const content = ObjC.unwrap($.getenv('CONTENT'))
+JSON.stringify({ model, stream: false, messages: [{ role: 'user', content }] })
+JXA
+)"
+  curl -fsS http://127.0.0.1:11434/api/chat \
+    -H 'Content-Type: application/json' \
+    -d "$payload" 2>/dev/null \
+    | plutil -extract message.content raw -o - -
+}
+
 run_gemini() {
   require_command gemini
   if [[ -n "$model" ]]; then
@@ -104,6 +177,7 @@ run_opencode() {
 }
 
 case "$provider" in
+  ollama) raw="$(run_ollama)" ;;
   codex) raw="$(run_codex)" ;;
   claude) raw="$(run_claude)" ;;
   gemini) raw="$(run_gemini)" ;;

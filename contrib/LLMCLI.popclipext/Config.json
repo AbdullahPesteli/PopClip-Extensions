@@ -3,7 +3,7 @@
   "popclip version": 5155,
   "name": "LLM CLI",
   "icon": "symbol:brain",
-  "description": "Rewrite selected text through Codex, Claude, Gemini, or OpenCode CLI.",
+  "description": "Rewrite selected text through Ollama, Codex, Claude, Gemini, or OpenCode.",
   "requirements": ["text"],
   "after": "paste-result",
   "restore pasteboard": false,
@@ -15,9 +15,9 @@
       "identifier": "provider",
       "label": "Provider",
       "type": "multiple",
-      "values": ["codex", "claude", "gemini", "opencode"],
-      "valueLabels": ["Codex CLI", "Claude CLI", "Gemini CLI", "OpenCode CLI"],
-      "defaultValue": "codex",
+      "values": ["ollama", "picker", "codex", "claude", "gemini", "opencode"],
+      "valueLabels": ["Ollama Local", "Picker", "Codex CLI", "Claude CLI", "Gemini CLI", "OpenCode CLI"],
+      "defaultValue": "ollama",
       "description": "CLI provider to use. The provider must already be installed and logged in."
     },
     {
