@@ -65,7 +65,9 @@ Set the Model field to override this mapping.
 
 ### Picker
 
-Default provider is `Picker`. It shows a native macOS list each time the action runs. This is a workaround for PopClip's lack of extension-controlled submenus. Choose `Ollama Local` instead if you prefer one-click correction without a list.
+Default provider is `Picker`. It shows a small native AppKit panel near the click location each time the action runs. This is a workaround for PopClip's lack of extension-controlled submenus. Choose `Ollama Local` instead if you prefer one-click correction without a list.
+
+The picker helper is source-only. On first use, the extension compiles `picker-helper.swift` into `~/Library/Caches/PopClipLLMCLI/`. If Swift is unavailable or compilation fails, it falls back to macOS's standard centered `choose from list` dialog.
 
 ### Codex CLI
 

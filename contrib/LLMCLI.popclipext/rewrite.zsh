@@ -14,6 +14,7 @@ model="${POPCLIP_OPTION_MODEL:-}"
 custom_prompt="${POPCLIP_OPTION_CUSTOMPROMPT:-}"
 modifier_flags="${POPCLIP_MODIFIER_FLAGS:-0}"
 input="$(cat)"
+extension_dir="${0:A:h}"
 
 if [[ -z "${input//[[:space:]]/}" ]]; then
   exit 1
@@ -45,7 +46,19 @@ case "$modifier_flags" in
 esac
 
 if [[ "$provider" == "picker" ]]; then
-  choice="$(osascript <<'APPLESCRIPT' 2>/dev/null || true
+  picker_helper() {
+    local src="$extension_dir/picker-helper.swift"
+    local cache_dir="$HOME/Library/Caches/PopClipLLMCLI"
+    local bin="$cache_dir/picker-helper"
+    mkdir -p "$cache_dir"
+    if [[ ! -x "$bin" || "$src" -nt "$bin" ]]; then
+      command -v swiftc >/dev/null 2>&1 || return 1
+      swiftc "$src" -o "$bin" >/dev/null 2>&1 || return 1
+    fi
+    "$bin"
+  }
+
+  choice="$(picker_helper 2>/dev/null || osascript <<'APPLESCRIPT' 2>/dev/null || true
 set choices to {"Ollama - Düzelt", "⌥ Ollama - Chat Kurumsal", "⇧ Ollama - Mail Kurumsal", "⌃ Ollama - Müşteri Tonu", "⌘ Codex - Düzelt", "⌘⌥ Codex - Chat Kurumsal", "⌘⇧ Codex - Mail Kurumsal", "Codex - Müşteri Tonu", "OpenCode - Düzelt", "OpenCode - Chat Kurumsal", "Claude - Düzelt", "Gemini - Düzelt", "Shortcut Help"}
 set picked to choose from list choices with title "LLM CLI" with prompt "Provider / preset seç. Semboller aynı işi hızlı tıkta da yapar:" default items {"Ollama - Düzelt"}
 if picked is false then
