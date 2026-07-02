@@ -18,7 +18,7 @@
       "type": "multiple",
       "values": ["ollama", "picker", "help", "codex", "claude", "gemini", "opencode"],
       "valueLabels": ["Ollama Local", "Picker", "Help", "Codex CLI", "Claude CLI", "Gemini CLI", "OpenCode CLI"],
-      "defaultValue": "ollama",
+      "defaultValue": "picker",
       "description": "CLI provider to use. The provider must already be installed and logged in."
     },
     {

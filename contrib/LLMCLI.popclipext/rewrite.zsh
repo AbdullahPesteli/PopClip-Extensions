@@ -8,7 +8,7 @@ export LC_ALL="${LC_ALL:-en_US.UTF-8}"
 # Homebrew, npm, and system locations without hard-coding a single machine.
 export PATH="$HOME/.npm-global/bin:$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
-provider="${POPCLIP_OPTION_PROVIDER:-ollama}"
+provider="${POPCLIP_OPTION_PROVIDER:-picker}"
 preset="${POPCLIP_OPTION_PRESET:-duzelt}"
 model="${POPCLIP_OPTION_MODEL:-}"
 custom_prompt="${POPCLIP_OPTION_CUSTOMPROMPT:-}"

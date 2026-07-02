@@ -65,7 +65,7 @@ Set the Model field to override this mapping.
 
 ### Picker
 
-Choose `Picker` as the provider to show a native macOS list each time the action runs. This is a workaround for PopClip's lack of extension-controlled submenus.
+Default provider is `Picker`. It shows a native macOS list each time the action runs. This is a workaround for PopClip's lack of extension-controlled submenus. Choose `Ollama Local` instead if you prefer one-click correction without a list.
 
 ### Codex CLI
 
