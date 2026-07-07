@@ -13,13 +13,22 @@
   "stdin": "text",
   "options": [
     {
+      "identifier": "interaction",
+      "label": "Click Action",
+      "type": "multiple",
+      "values": ["picker", "direct"],
+      "valueLabels": ["Show Picker", "Run Directly"],
+      "defaultValue": "picker",
+      "description": "What a normal click does. Modifier shortcuts still run directly."
+    },
+    {
       "identifier": "provider",
       "label": "Provider",
       "type": "multiple",
       "values": ["ollama", "picker", "help", "codex", "claude", "gemini", "opencode"],
       "valueLabels": ["Ollama Local", "Picker", "Help", "Codex CLI", "Claude CLI", "Gemini CLI", "OpenCode CLI"],
-      "defaultValue": "picker",
-      "description": "CLI provider to use. The provider must already be installed and logged in."
+      "defaultValue": "ollama",
+      "description": "CLI provider to use when Click Action is Run Directly. The provider must already be installed and logged in."
     },
     {
       "identifier": "preset",
@@ -36,6 +45,20 @@
       "type": "string",
       "defaultValue": "",
       "description": "Optional model name. Leave blank to use the CLI default."
+    },
+    {
+      "identifier": "timeoutseconds",
+      "label": "Timeout Seconds",
+      "type": "string",
+      "defaultValue": "25",
+      "description": "Maximum seconds before an external CLI request is cancelled."
+    },
+    {
+      "identifier": "menuconfig",
+      "label": "Menu Config Path",
+      "type": "string",
+      "defaultValue": "",
+      "description": "Optional JSON menu config path. Leave blank for ~/.config/popclip-llm-cli-rewrite/menu.json."
     },
     {
       "identifier": "customprompt",

@@ -17,7 +17,10 @@ It is useful when you already pay for or are logged into a CLI tool and do not w
 - Uses existing CLI login/session state.
 - No API key field in PopClip.
 - Can use local Ollama preset models when available.
-- Includes a native macOS picker mode for choosing provider/preset at runtime.
+- Includes a native macOS menu picker for choosing provider/preset at runtime.
+- Picker menu is user-editable via a JSON config (add/remove/reorder items).
+- Separate `Click Action` option: a normal click can either show the picker or run a configured provider directly.
+- Configurable request timeout for external CLIs.
 - Supports modifier-key shortcuts for quick provider/preset changes without opening settings.
 - Supports multiple rewrite presets:
   - `Düzelt`: minimal Turkish spelling/punctuation correction.
@@ -65,9 +68,11 @@ Set the Model field to override this mapping.
 
 ### Picker
 
-Default provider is `Picker`. It shows a small native AppKit panel near the click location each time the action runs. This is a workaround for PopClip's lack of extension-controlled submenus. Choose `Ollama Local` instead if you prefer one-click correction without a list.
+By default `Click Action` is `Show Picker`, so a normal click opens a small native AppKit menu near the click location. This is a workaround for PopClip's lack of extension-controlled submenus. Set `Click Action` to `Run Directly` (and pick a `Provider`/`Preset`) if you prefer one-click correction without a list. Modifier-key shortcuts always run directly regardless of this setting.
 
-The picker helper is source-only. On first use, the extension compiles `picker-helper.swift` into `~/Library/Caches/PopClipLLMCLI/`. If Swift is unavailable or compilation fails, it falls back to macOS's standard centered `choose from list` dialog.
+The picker menu is user-editable. On first use the extension writes a default menu to `~/.config/popclip-llm-cli-rewrite/menu.json` (override the path with the `Menu Config Path` option). Each item can set `label`, `provider`, `preset`, `model`, and `customPrompt`; use `{ "separator": true }` for a divider, `{ "enabled": false }` to hide an item, or `{ "action": "editMenu" }` / `{ "action": "help" }` for the built-in actions. The default menu includes a `Menüyü Düzenle` item that opens this file in your editor.
+
+The picker helper is source-only. On first use, the extension compiles `picker-helper.swift` into `~/Library/Caches/PopClipLLMCLI/`. If Swift is unavailable or compilation fails, the picker click is cancelled (no rewrite runs); use a `Run Directly` provider or a modifier shortcut in that case.
 
 ### Codex CLI
 
@@ -130,6 +135,7 @@ The action title also includes a compact shortcut reminder. Choose `Help` as the
 - This extension sends selected text to whichever third-party CLI/provider you choose.
 - Do not use it on sensitive text unless you trust that provider and its account/data settings.
 - CLIs can be slower than a local Ollama model. In testing, Codex was usable for short text, while OpenCode was slower.
+- The `Timeout Seconds` option (default `25`) caps how long an external CLI request may run before it is cancelled. It uses `gtimeout` when available (`brew install coreutils`); otherwise the request runs without a hard timeout.
 - The output quality depends heavily on the provider, model, and prompt.
 - Reasoning models are not automatically better for this workflow. For PopClip, the best model is usually the one that follows instructions and returns only clean final text.
 
