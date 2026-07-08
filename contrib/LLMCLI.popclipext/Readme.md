@@ -35,7 +35,7 @@ It is useful when you already pay for or are logged into a CLI tool and do not w
 
 1. Install and log in to at least one supported CLI.
 2. Download or clone this repository.
-3. Double-click `LLM-CLI.popclipext`.
+3. Double-click `LLMCLI.popclipext`.
 4. Enable the extension in PopClip.
 5. Open the extension settings and choose your provider.
 
@@ -141,14 +141,11 @@ The action title also includes a compact shortcut reminder. Choose `Help` as the
 
 ## Development
 
-See [CONTEXT.md](CONTEXT.md) for project background, PopClip API constraints,
-known provider behavior, test cases, and suggested next improvements.
-
 Test the script from Terminal:
 
 ```sh
 env POPCLIP_OPTION_PROVIDER=codex POPCLIP_OPTION_PRESET=duzelt POPCLIP_OPTION_MODEL='' \
-  ./LLM-CLI.popclipext/rewrite.zsh <<'EOF'
+  ./LLMCLI.popclipext/rewrite.zsh <<'EOF'
 bu metni düzgün hale getirirmisin ama anlamı bozma
 EOF
 ```
@@ -156,7 +153,7 @@ EOF
 Create a distributable zip:
 
 ```sh
-zip -r dist/LLM-CLI.popclipext.zip LLM-CLI.popclipext
+zip -r dist/LLMCLI.popclipext.zip LLMCLI.popclipext
 ```
 
 ## License
