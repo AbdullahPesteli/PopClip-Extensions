@@ -1,0 +1,71 @@
+{
+  "identifier": "com.pestly.popclip.extension.llm-cli-rewrite",
+  "popclip version": 5155,
+  "name": "LLM CLI",
+  "title": "LLM CLI: ⌥ Chat · ⇧ Mail · ⌃ Müşteri · ⌘ Codex · ⌘⌃ Picker",
+  "icon": "symbol:brain",
+  "description": "Rewrite selected text through Ollama, Codex, Claude, Gemini, or OpenCode.",
+  "requirements": ["text"],
+  "after": "paste-result",
+  "restore pasteboard": false,
+  "interpreter": "/bin/zsh",
+  "shell script file": "rewrite.zsh",
+  "stdin": "text",
+  "options": [
+    {
+      "identifier": "interaction",
+      "label": "Click Action",
+      "type": "multiple",
+      "values": ["picker", "direct"],
+      "valueLabels": ["Show Picker", "Run Directly"],
+      "defaultValue": "picker",
+      "description": "What a normal click does. Modifier shortcuts still run directly."
+    },
+    {
+      "identifier": "provider",
+      "label": "Provider",
+      "type": "multiple",
+      "values": ["ollama", "picker", "help", "codex", "claude", "gemini", "opencode"],
+      "valueLabels": ["Ollama Local", "Picker", "Help", "Codex CLI", "Claude CLI", "Gemini CLI", "OpenCode CLI"],
+      "defaultValue": "ollama",
+      "description": "CLI provider to use when Click Action is Run Directly. The provider must already be installed and logged in."
+    },
+    {
+      "identifier": "preset",
+      "label": "Preset",
+      "type": "multiple",
+      "values": ["duzelt", "chat", "mail", "musteri", "custom"],
+      "valueLabels": ["Düzelt", "Chat Kurumsal", "Mail Kurumsal", "Müşteri Tonu", "Custom"],
+      "defaultValue": "duzelt",
+      "description": "Rewrite style."
+    },
+    {
+      "identifier": "model",
+      "label": "Model",
+      "type": "string",
+      "defaultValue": "",
+      "description": "Optional model name. Leave blank to use the CLI default."
+    },
+    {
+      "identifier": "timeoutseconds",
+      "label": "Timeout Seconds",
+      "type": "string",
+      "defaultValue": "25",
+      "description": "Maximum seconds before an external CLI request is cancelled."
+    },
+    {
+      "identifier": "menuconfig",
+      "label": "Menu Config Path",
+      "type": "string",
+      "defaultValue": "",
+      "description": "Optional JSON menu config path. Leave blank for ~/.config/popclip-llm-cli-rewrite/menu.json."
+    },
+    {
+      "identifier": "customprompt",
+      "label": "Custom Prompt",
+      "type": "string",
+      "defaultValue": "",
+      "description": "Used only when Preset is Custom."
+    }
+  ]
+}
