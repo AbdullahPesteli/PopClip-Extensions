@@ -13,59 +13,83 @@
   "stdin": "text",
   "options": [
     {
+      "identifier": "grp_behavior",
+      "label": "▸ Davranış",
+      "type": "heading"
+    },
+    {
       "identifier": "interaction",
-      "label": "Click Action",
+      "label": "Tıklama Davranışı",
       "type": "multiple",
       "values": ["picker", "direct"],
-      "valueLabels": ["Show Picker", "Run Directly"],
+      "valueLabels": ["Menüyü Göster", "Doğrudan Çalıştır"],
       "defaultValue": "picker",
-      "description": "What a normal click does. Modifier shortcuts still run directly."
+      "description": "Normal tıklama ne yapsın. Modifier kısayolları her zaman doğrudan çalışır."
+    },
+    {
+      "identifier": "autofix",
+      "label": "Otomatik Onarım",
+      "type": "multiple",
+      "values": ["1", "0"],
+      "valueLabels": ["Açık (kendini onarır + yedek sağlayıcı)", "Kapalı"],
+      "defaultValue": "1",
+      "description": "Ollama'yı başlatır, eksik modeli geri yükler, seçili sağlayıcı çalışmazsa çalışan başka birine geçer."
+    },
+    {
+      "identifier": "grp_direct",
+      "label": "▸ Doğrudan Çalıştırma (menü kapalıyken)",
+      "type": "heading"
     },
     {
       "identifier": "provider",
-      "label": "Provider",
+      "label": "Sağlayıcı",
       "type": "multiple",
       "values": ["ollama", "picker", "help", "codex", "claude", "gemini", "opencode"],
-      "valueLabels": ["Ollama Local", "Picker", "Help", "Codex CLI", "Claude CLI", "Gemini CLI", "OpenCode CLI"],
+      "valueLabels": ["Ollama (yerel)", "Menü", "Yardım", "Codex CLI", "Claude CLI", "Gemini CLI", "OpenCode CLI"],
       "defaultValue": "ollama",
-      "description": "CLI provider to use when Click Action is Run Directly. The provider must already be installed and logged in."
+      "description": "Doğrudan çalıştırmada kullanılacak CLI. Kurulu ve giriş yapılmış olmalı."
     },
     {
       "identifier": "preset",
-      "label": "Preset",
+      "label": "Stil",
       "type": "multiple",
       "values": ["duzelt", "chat", "mail", "musteri", "custom"],
-      "valueLabels": ["Düzelt", "Chat Kurumsal", "Mail Kurumsal", "Müşteri Tonu", "Custom"],
+      "valueLabels": ["Düzelt", "Chat Kurumsal", "Mail Kurumsal", "Müşteri Tonu", "Özel"],
       "defaultValue": "duzelt",
-      "description": "Rewrite style."
+      "description": "Yeniden yazma stili."
     },
     {
       "identifier": "model",
       "label": "Model",
       "type": "string",
       "defaultValue": "",
-      "description": "Optional model name. Leave blank to use the CLI default."
+      "description": "İsteğe bağlı model adı. Boş bırakırsan stilin varsayılan modeli kullanılır. (Modeli menüden de seçebilirsin.)"
+    },
+    {
+      "identifier": "grp_advanced",
+      "label": "▸ Gelişmiş",
+      "type": "heading"
     },
     {
       "identifier": "timeoutseconds",
-      "label": "Timeout Seconds",
+      "label": "Zaman Aşımı (sn)",
       "type": "string",
       "defaultValue": "25",
-      "description": "Maximum seconds before an external CLI request is cancelled."
+      "description": "Harici bir CLI isteği kaç saniye sonra iptal edilsin."
     },
     {
       "identifier": "menuconfig",
-      "label": "Menu Config Path",
+      "label": "Menü Yapılandırma Yolu",
       "type": "string",
       "defaultValue": "",
-      "description": "Optional JSON menu config path. Leave blank for ~/.config/popclip-llm-cli-rewrite/menu.json."
+      "description": "İsteğe bağlı menü JSON yolu. Boş = ~/.config/popclip-llm-cli-rewrite/menu.json."
     },
     {
       "identifier": "customprompt",
-      "label": "Custom Prompt",
+      "label": "Özel Prompt",
       "type": "string",
       "defaultValue": "",
-      "description": "Used only when Preset is Custom."
+      "description": "Yalnızca Stil = Özel seçiliyken kullanılır."
     }
   ]
 }
